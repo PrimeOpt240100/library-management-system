@@ -3,7 +3,9 @@ package com.prime.opt.dummy.project.service.impl;
 import com.prime.opt.dummy.project.Enum.user_enum.Course;
 import com.prime.opt.dummy.project.Enum.user_enum.Designation;
 import com.prime.opt.dummy.project.Enum.user_enum.Roles;
+import com.prime.opt.dummy.project.constants.LibrarySystemErrorCodes;
 import com.prime.opt.dummy.project.entity.UserEntity;
+import com.prime.opt.dummy.project.model.UserDetails;
 import com.prime.opt.dummy.project.repository.UserRepository;
 import com.prime.opt.dummy.project.request.AddUserRequest;
 import com.prime.opt.dummy.project.request.BaseResponse;
@@ -38,6 +40,17 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         return new BaseResponse<>(0,"OK",addUserResponse);
+    }
+
+    @Override
+    public BaseResponse<UserDetails> getUserDetailsByUserId(String userId) {
+        UserDetails userDetails = userRepository.fetchUserDetailsByUserId(userId);
+        BaseResponse response = BaseResponse.builder()
+                .code(LibrarySystemErrorCodes.ok_code)
+                .msg(LibrarySystemErrorCodes.ok_msg)
+                .data(userDetails)
+                .build();
+        return response;
     }
 
     private UserEntity getUserEntity(AddUserRequest addUserRequest, String newUserId) {

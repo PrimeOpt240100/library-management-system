@@ -1,5 +1,6 @@
 package com.prime.opt.dummy.project.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.prime.opt.dummy.project.Enum.user_enum.Course;
 import com.prime.opt.dummy.project.Enum.user_enum.Designation;
 import com.prime.opt.dummy.project.Enum.user_enum.Roles;
@@ -8,8 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "user_details_table")
@@ -27,7 +29,9 @@ public class UserEntity {
     private String name;
 
     @Column(name = "user_dob")
-    private Date dob;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    private LocalDate dob;
 
     @Column(name = "user_role", nullable = false)
     @Enumerated(value = EnumType.STRING)
