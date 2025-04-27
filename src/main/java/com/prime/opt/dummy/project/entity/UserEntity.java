@@ -51,4 +51,7 @@ public class UserEntity {
     @Column(name = "mail_id")
     private String emailId;
 
+    @Column(name = "user_password", nullable = false)
+    private String password;
+
 }

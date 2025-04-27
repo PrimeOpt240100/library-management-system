@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AddUserResponse {
+public class RegisterUserResponse {
     private String id;
     private String name;
     private Roles role;

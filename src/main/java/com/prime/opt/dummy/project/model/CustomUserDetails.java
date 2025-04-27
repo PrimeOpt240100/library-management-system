@@ -8,14 +8,14 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class UserDetails {
+public class CustomUserDetails {
     private String name;
     private Roles roles;
     private Course course;
     private Designation designation;
     private String phoneNo;
 
-    public UserDetails(String name, Roles roles, Course course, Designation designation, String phoneNo) {
+    public CustomUserDetails(String name, Roles roles, Course course, Designation designation, String phoneNo) {
         this.name = name;
         this.roles = roles;
         this.course = course;

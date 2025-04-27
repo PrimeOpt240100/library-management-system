@@ -8,16 +8,7 @@ public interface QueryConstant {
 
     String FIND_MAX_CARD_ID_BY_PREFIX_QUERY = "select count(card_id) from card_details_table where card_id like CONCAT(:prefix, '%')";
 
-    String FETCH_USER_DETAILS_BY_USER_ID =
-            "SELECT new com.prime.opt.dummy.project.model.UserDetails(" +
-                    "u.name, " +
-                    "u.role, " +
-                    "u.course, " +
-                    "u.designation, " +
-                    "u.phoneNo" +
-                    ") " +
-                    "FROM UserEntity u " +
-                    "WHERE u.userId = :userId";
+    String FETCH_USER_DETAILS_BY_USER_ID = "SELECT new com.prime.opt.dummy.project.model.CustomUserDetails(" + "u.name, " + "u.role, " + "u.course, " + "u.designation, " + "u.phoneNo" + ") " + "FROM UserEntity u " + "WHERE u.userId = :userId";
 
-
+    String FETCH_CARD_DETAILS_BY_USER_ID = " SELECT new com.prime.opt.dummy.project.response.NewCardResponse(c.cardId, c.name, c.cardType, c.issuedDate, c.validDate) FROM CardEntity c WHERE c.userId = :userId";
 }

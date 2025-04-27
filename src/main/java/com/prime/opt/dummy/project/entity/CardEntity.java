@@ -2,7 +2,7 @@ package com.prime.opt.dummy.project.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.prime.opt.dummy.project.Enum.card_enum.CardType;
-import com.prime.opt.dummy.project.model.BookDetails;
+import com.prime.opt.dummy.project.model.IssuedBookDetails;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,7 +31,7 @@ public class CardEntity {
     private CardType cardType;
 
     @Transient
-    private List<BookDetails> bookDetailsList;
+    private List<IssuedBookDetails> issuedBookDetailsList;
 
     @Column(name = "fine", nullable = false)
     private boolean fine;
@@ -48,6 +48,5 @@ public class CardEntity {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate validDate;
-
 
 }
