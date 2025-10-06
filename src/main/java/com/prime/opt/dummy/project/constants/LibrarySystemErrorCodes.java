@@ -5,7 +5,7 @@ public interface LibrarySystemErrorCodes {
     int ok_code = 0;
     String ok_msg = "OK";
 
-    int fail_code = 404;
+    int fail_code = 420;
     String fail_msg = "failed";
 
     int duplicate_id_code = 144;

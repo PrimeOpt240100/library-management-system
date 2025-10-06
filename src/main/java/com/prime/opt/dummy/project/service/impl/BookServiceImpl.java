@@ -1,17 +1,21 @@
 package com.prime.opt.dummy.project.service.impl;
 
+import com.prime.opt.dummy.project.Enum.book_enum.Genre;
 import com.prime.opt.dummy.project.Enum.book_enum.Status;
+import com.prime.opt.dummy.project.constants.LibrarySystemErrorCodes;
 import com.prime.opt.dummy.project.entity.BookEntity;
 import com.prime.opt.dummy.project.repository.BookRepository;
-import com.prime.opt.dummy.project.request.AddBookRequest;
+import com.prime.opt.dummy.project.request.NewBookEntryRequest;
 import com.prime.opt.dummy.project.request.BaseResponse;
-import com.prime.opt.dummy.project.response.AddBookResponse;
+import com.prime.opt.dummy.project.response.NewBookEntryResponse;
 import com.prime.opt.dummy.project.service.BookService;
 import com.prime.opt.dummy.project.service.CustomIdGeneratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -25,40 +29,60 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public BaseResponse<AddBookResponse> addNewBook(AddBookRequest addBookRequest) {
-        String newBookId = idGeneratorService.generateCustomBookId(addBookRequest.getGenre());
-        BookEntity newBookEntity = createNewBookEntity(addBookRequest, newBookId);
-        BookEntity addedBook = bookRepository.save(newBookEntity);
+    public BaseResponse<List<NewBookEntryResponse>> registerBookStock(List<NewBookEntryRequest> newBookEntryRequest) {
+        List<NewBookEntryResponse> responseList = new ArrayList<>();
 
-        AddBookResponse bookResponse = AddBookResponse.builder()
-                .bookId(addedBook.getBookId())
-                .name(addedBook.getName())
-                .author(addedBook.getAuthor())
-                .publisher(addedBook.getPublisher())
-                .edition(addedBook.getEdition())
-                .language(addedBook.getLanguage())
-                .addedDate(addedBook.getBookAdded())
-                .build();
+        for (NewBookEntryRequest request : newBookEntryRequest) {
+            Genre bookGenre = request.getGenre();
+            String prefix = bookGenre.getBookPrefix(bookGenre);
+            int lastCount = bookRepository.findMaxIdWithPrefix(prefix);
+            List<BookEntity> bookEntityList = new ArrayList<>();
+            List<String> bookIdList = new ArrayList<>();
+            int totalQtyAdd = request.getQty();
+            NewBookEntryResponse bookResponse = prepareResponseFromRequest(request);
 
-        return new BaseResponse<>(0,"OK", bookResponse);
+            for (int i = 1; i <= totalQtyAdd; i++) {
+                String bookId = prefix + (lastCount + i);
+                BookEntity entity = prepareEntityFromRequest(request, bookGenre);
+                entity.setBookId(bookId);
+                bookEntityList.add(entity);
+                bookIdList.add(bookId);
+            }
+
+            try {
+                bookRepository.saveAll(bookEntityList);
+                bookResponse.getBookIdList().addAll(bookIdList);
+                responseList.add(bookResponse);
+            } catch (Exception ex) {
+                // log error while saving book entities
+            }
+        }
+        return new BaseResponse<>(LibrarySystemErrorCodes.ok_code, LibrarySystemErrorCodes.ok_msg, responseList);
     }
 
-    private BookEntity createNewBookEntity(AddBookRequest request, String bookId){
-        BookEntity bookEntity = new BookEntity();
+    private BookEntity prepareEntityFromRequest(NewBookEntryRequest request, Genre bookGenre){
+        return BookEntity.builder()
+                .name(request.getName())
+                .author(request.getAuthor())
+                .edition(request.getEdition())
+                .publisher(request.getPublisher())
+                .genre(bookGenre)
+                .language(request.getLanguage())
+                .bookAdded(LocalDate.now())
+                .status(Status.AVAILABLE)
+                .build();
+    }
 
-        bookEntity.setBookId(bookId);
-        bookEntity.setName(request.getName());
-        bookEntity.setAuthor(request.getAuthor());
-        bookEntity.setPublisher(request.getPublisher());
-        bookEntity.setEdition(request.getEdition());
-        bookEntity.setGenre(request.getGenre());
-        bookEntity.setLanguage(request.getLanguage());
-        bookEntity.setStatus(Status.AVAILABLE);
-        bookEntity.setTotalCopies(request.getTotalCopies());
-        bookEntity.setAvailableCopies(request.getTotalCopies());
-        bookEntity.setBookAdded(LocalDate.now());
-
-        return bookEntity;
+    private NewBookEntryResponse prepareResponseFromRequest(NewBookEntryRequest request){
+        return NewBookEntryResponse.builder()
+                .name(request.getName())
+                .author(request.getAuthor())
+                .language(request.getLanguage())
+                .edition(request.getEdition())
+                .publisher(request.getPublisher())
+                .addedDate(LocalDate.now())
+                .bookIdList(new ArrayList<>())
+                .build();
     }
 
 }

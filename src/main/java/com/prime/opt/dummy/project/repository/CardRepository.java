@@ -7,7 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.JpaQueryLookupStrategy;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface CardRepository extends JpaRepository<CardEntity, String> {
 
     @Query(value = QueryConstant.FIND_MAX_CARD_ID_BY_PREFIX_QUERY, nativeQuery = true)
@@ -15,4 +17,9 @@ public interface CardRepository extends JpaRepository<CardEntity, String> {
 
     @Query(value = QueryConstant.FETCH_CARD_DETAILS_BY_USER_ID)
     NewCardResponse fetchCardDetailsByUserId(@Param("userId") String userId);
+
+    @Query(value = QueryConstant.IS_HAVING_FINE_ON_CARD, nativeQuery = true)
+    Boolean isHavingFineOnCard(@Param("cardId") String cardId);
+
+    CardEntity findByCardId(String cardId);
 }

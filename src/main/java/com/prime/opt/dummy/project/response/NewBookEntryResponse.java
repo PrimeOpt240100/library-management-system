@@ -8,13 +8,13 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Setter
 @Getter
 @Builder
-public class AddBookResponse {
+public class NewBookEntryResponse {
 
-    private String bookId;
     private String name;
     private String author;
     private String publisher;
@@ -24,5 +24,7 @@ public class AddBookResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate addedDate;
+
+    private List<String> bookIdList;
 
 }

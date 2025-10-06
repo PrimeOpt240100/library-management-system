@@ -2,6 +2,7 @@ package com.prime.opt.dummy.project.service;
 
 import com.prime.opt.dummy.project.Enum.book_enum.Genre;
 import com.prime.opt.dummy.project.Enum.card_enum.CardType;
+import com.prime.opt.dummy.project.Enum.request_enum.LibRequestType;
 import com.prime.opt.dummy.project.Enum.user_enum.Roles;
 
 public interface CustomIdGeneratorService {
@@ -11,5 +12,7 @@ public interface CustomIdGeneratorService {
     String generateCustomBookId(Genre genre);
 
     String generateCustomCardId(CardType cardType);
+
+    String generateCustomRequestId(LibRequestType requestType);
 
 }

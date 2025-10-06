@@ -6,6 +6,7 @@ import com.prime.opt.dummy.project.Enum.book_enum.Language;
 import com.prime.opt.dummy.project.Enum.book_enum.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -18,6 +19,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class BookEntity {
 
     @Id
@@ -48,15 +50,12 @@ public class BookEntity {
     @Column(name = "status", nullable = false)
     private Status status;
 
-    @Column(name = "total_qty", nullable = false)
-    private int totalCopies;
-
-    @Column(name = "available_qty", nullable = false)
-    private int availableCopies;
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     @Column(name = "added_date")
     private LocalDate bookAdded;
+
+    @Column(name = "card_id")
+    private String cardId;
 
 }

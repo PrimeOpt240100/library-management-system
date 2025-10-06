@@ -7,12 +7,15 @@ import com.prime.opt.dummy.project.response.RegisterUserResponse;
 import com.prime.opt.dummy.project.response.NewCardResponse;
 import com.prime.opt.dummy.project.service.CardService;
 import com.prime.opt.dummy.project.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
+@Validated
 public class UserController {
 
 
@@ -26,7 +29,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<BaseResponse<RegisterUserResponse>> addNewUser(@RequestBody RegisterUserRequest request){
+    public ResponseEntity<BaseResponse<RegisterUserResponse>> addNewUser(@Valid @RequestBody RegisterUserRequest request){
         return new ResponseEntity<>(userService.addNewUser(request), HttpStatus.CREATED);
     }
 
